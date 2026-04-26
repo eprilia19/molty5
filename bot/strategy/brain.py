@@ -821,6 +821,13 @@ def update(self):
     if not hasattr(self, "memory"):
         return
 
+target = getattr(self.memory, "target", None)
+
+if target:
+    return "attack"
+
+return "move"
+    
     action = self.decide()
     self.execute(action)
 
