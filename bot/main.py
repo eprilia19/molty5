@@ -10,6 +10,15 @@ from bot.heartbeat import Heartbeat
 from bot.dashboard.server import start_dashboard
 from bot.utils.logger import get_logger
 
+from bot.strategy.brain import Brain
+from bot.memory.agent_memory import AgentMemory
+
+brain = Brain()
+memory = AgentMemory()
+
+# hubungkan
+brain.bind(memory)
+
 log = get_logger(__name__)
 
 # Railway injects PORT env var; fallback to DASHBOARD_PORT or 8080
