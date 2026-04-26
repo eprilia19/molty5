@@ -256,3 +256,8 @@ class Heartbeat:
 
         log.info("Game complete. Starting next cycle in 5s...")
         await asyncio.sleep(5)
+
+def heartbeat():
+    # existing logic
+
+    brain.update() 
