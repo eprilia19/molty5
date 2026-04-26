@@ -811,6 +811,56 @@ def _choose_move_target(connections, danger_ids: set,
 
     candidates.sort(key=lambda x: x[1], reverse=True)
     return candidates[0][0]
+
+def bind(self, agent_memory):
+    self.memory = agent_memory
+
+
+def update(self):
+    """Dipanggil tiap heartbeat"""
+    if not hasattr(self, "memory"):
+        return
+
+    action = self.decide()
+    self.execute(action)
+
+
+def execute(self, action):
+    agent = getattr(self.memory, "agent", None)
+
+    if not agent:
+        return
+
+    # ===== ACTION HANDLER =====
+    if action == "attack":
+        if hasattr(self.memory, "target") and self.memory.target:
+            agent.attack(self.memory.target)
+        else:
+            self.default_behavior()
+
+    elif action == "move":
+        if hasattr(agent, "move_random"):
+            agent.move_random()
+
+    else:
+        self.default_behavior()
+
+
+def default_behavior(self):
+    agent = getattr(self.memory, "agent", None)
+
+    if not agent:
+        return
+
+    # cari target dari memory
+    target = getattr(self.memory, "target", None)
+
+    if target:
+        if hasattr(agent, "move_towards"):
+            agent.move_towards(target)
+    else:
+        if hasattr(agent, "move_random"):
+            agent.move_random()
 """
 View fields from api-summary.md (all implemented above — v1.5.2):
 ✅ self          — hp, ep, atk, def, inventory, equippedWeapon, isAlive
